@@ -1,0 +1,2 @@
+# devtoolset_glib_gcc_patchelf_download_script
+devtoolset,glib,gcc,patchelfをダウンロードするPowershellスクリプト
