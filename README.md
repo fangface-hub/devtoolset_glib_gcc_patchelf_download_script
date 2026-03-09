@@ -27,6 +27,11 @@
   | gcc12.2 | /opt/gcc-12.2 |
   | patchelf0.18 | /opt/patchelf0.18 |
 
+- ビルドのためのパッケージは以下のとおり
+
+  | コンポーネント | カスタムのインストール先 |
+  | --- | --- |
+
 ## 2. ダウンロード
 
 必要な資材のダウンロードの手順を以下にまとめる
@@ -146,7 +151,7 @@ sudo yum install -y gmp-devel mpfr-devel libmpc-devel \
     sudo rpm -Uvh --force \
         libgfortran5*.rpm \
         scl-utils-*.rpm \
-        devtoolset11*.rpm
+        devtoolset-11*.rpm
     ```
 
     > エラーになったら `devtoolset11_rpms` の中から必要な依存パッケージを追加する。依存パッケージを全てダウンロードしているはず。
@@ -189,7 +194,7 @@ sudo yum install -y gmp-devel mpfr-devel libmpc-devel \
     ```bash
     cd gcc12.2_tarball
     tar xf gcc-12.2.0.tar.xz
-    tar xf gmp‑6.2.1.tar.xz
+    tar xf gmp-6.2.1.tar.xz
     tar xf mpfr-4.1.0.tar.xz
     tar xf mpc-1.2.1.tar.gz
     cd gcc-12.2.0
