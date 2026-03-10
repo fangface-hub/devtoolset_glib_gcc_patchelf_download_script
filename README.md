@@ -1,6 +1,6 @@
 # RHEL7に新しいglib,gccを入れて、VSCode1.86以降のバージョンのリモート拡張機能を使えるようにする方法
 
-## 1.概要
+## 1. 概要
 
 この記事はダウンロード環境とターゲットの RHEL7計算機が別の計算機である想定で、RHEL7 に新しい glib,gcc を入れて、VSCode1.86以降のバージョンのリモート拡張機能を使えるようにする方法を記載する。
 
@@ -26,11 +26,24 @@
   | glib2.29 | /opt/glibc-2.29 |
   | gcc12.2 | /opt/gcc-12.2 |
   | patchelf0.18 | /opt/patchelf0.18 |
+  | openssl-3.0.18 | /opt/openssl-3.0 |
+  | Python-3.13.12 | /opt/python-3.13 |
 
 - ビルドのためのパッケージは以下のとおり
 
-  | コンポーネント | カスタムのインストール先 |
+  | コンポーネント | インストール方法 |
   | --- | --- |
+  | gmp-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | mpfr-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | libmpc-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | bison | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | flex | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | wget | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | tar | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | xz | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | devtoolset-11 | rpmファイルをダウンロードしインストールする |
+  | scl-utils | rpmファイルをダウンロードしインストールする |
+  | libgfortran5 | rpmファイルをダウンロードしインストールする |
 
 ## 2. ダウンロード
 
@@ -48,7 +61,28 @@ sudo yum install -y gmp-devel mpfr-devel libmpc-devel \
     bison flex wget tar xz
 ```
 
-### 2.2. オンライン端末で devtoolset-11 と関連パッケージをダウンロードする
+### 2.2. オンライン端末で Python-3.13.12 と OpenSSL3.0 のtarballをダウンロードする
+
+- オンライン端末がRHEL7の場合
+
+  1. curlでダウンロードする
+
+      ```bash
+      mkdir python3.13_tarball
+      cd python3.13_tarball
+      curl -O https://www.python.org/ftp/python/3.13.12/Python-3.13.12.tgz
+      curl -O https://github.com/openssl/openssl/releases/download/openssl-3.0.18/openssl-3.0.18.tar.gz
+      ```
+
+  1. ターゲットのRHEL7計算機に `python3.13_tarball` ディレクトリを移動する
+
+- オンライン端末がWindowsの場合
+
+  1. ダウンロードスクリプト `python3.13download.ps1` を右クリックしPowershellで実行する
+
+  1. ターゲットのRHEL7計算機に `python3.13_tarball` ディレクトリを移動する
+
+### 2.3. オンライン端末で devtoolset-11 と関連パッケージをダウンロードする
 
 > crosstool-ng を使う方法もあるが、必要な資材が多いので devtoolset-11 が安全で最短。
 
@@ -68,11 +102,9 @@ sudo yum install -y gmp-devel mpfr-devel libmpc-devel \
 
   1. ダウンロードスクリプト `devtoolset11download.ps1` を右クリックしPowershellで実行する
 
-  1. `devtoolset11download.ps1` を右クリックし、PowerShellで実行する
-
   1. ターゲットのRHEL7計算機に `devtoolset11_rpms` ディレクトリを移動する
 
-### 2.3. glib2.29をダウンロードする
+### 2.4. glib2.29をダウンロードする
 
 - オンライン端末がRHEL7の場合
 
@@ -92,7 +124,7 @@ sudo yum install -y gmp-devel mpfr-devel libmpc-devel \
   
   1. ターゲットのRHEL7計算機に `glib2.29_tarball` ディレクトリを移動する
 
-### 2.4. gcc12.2 をダウンロードする
+### 2.5. gcc12.2 をダウンロードする
 
 - オンライン端末がRHEL7の場合
 
@@ -119,7 +151,7 @@ sudo yum install -y gmp-devel mpfr-devel libmpc-devel \
 
   1. ターゲットのRHEL7計算機に `gcc12.2_tarball` ディレクトリを移動する
 
-### 2.5 patchelf-0.18 のダウンロード
+### 2.6. patchelf-0.18 のダウンロード
 
 - オンライン端末がRHEL7の場合
 
@@ -142,7 +174,51 @@ sudo yum install -y gmp-devel mpfr-devel libmpc-devel \
 
 インストール手順を3章にまとめる
 
-### 3.1. devtoolset-11をインストールする
+### 3.1. Python-3.13.12 と OpenSSL3.0 をインストールする（ssl 解決）
+
+1. ターゲットのRHEL7計算機で以下のコマンド
+
+  ```bash
+  cd python3.13_tarball
+  # ssl モジュールを有効化するため OpenSSL を先にビルドする
+  # 事前に openssl-3.0.18.tar.gz を python3.13_tarball に配置しておく
+  tar xf openssl-3.0.18.tar.gz
+  cd openssl-3.0.18
+  ./Configure linux-x86_64 --prefix=/opt/openssl-3.0 --openssldir=/opt/openssl-3.0 shared zlib
+  make -j"$(nproc)"
+  sudo make install_sw
+
+  # ランタイムリンカに OpenSSL のライブラリパスを登録
+  {
+      echo "/opt/openssl-3.0/lib64"
+      echo "/opt/openssl-3.0/lib"
+  } | sudo tee /etc/ld.so.conf.d/openssl-3.0.conf
+  sudo ldconfig
+
+  cd ..
+  # Python3.13 を /opt/openssl-3.0 にリンクしてビルドする
+  export CPPFLAGS="-I/opt/openssl-3.0/include"
+  export LDFLAGS="-Wl,-rpath,/opt/openssl-3.0/lib64 -Wl,-rpath,/opt/openssl-3.0/lib -L/opt/openssl-3.0/lib64 -L/opt/openssl-3.0/lib"
+  export PKG_CONFIG_PATH="/opt/openssl-3.0/lib64/pkgconfig:/opt/openssl-3.0/lib/pkgconfig"
+
+  tar xf Python-3.13.12.tgz
+  cd Python-3.13.12
+  ./configure --prefix=/opt/python-3.13 --enable-optimizations --with-openssl=/opt/openssl-3.0 --with-openssl-rpath=auto
+  make -j"$(nproc)"
+  sudo make install
+
+  # ssl の確認
+  /opt/python-3.13/bin/python3 -c "import ssl; print(ssl.OPENSSL_VERSION)"
+
+  # alternatives 設定
+  sudo update-alternatives \
+      --install /usr/bin/python3 python3 /opt/python-3.13/bin/python3 50 \
+      --slave /usr/bin/pip3 pip3 /opt/python-3.13/bin/pip3 \
+      --slave /usr/bin/idle3 idle3 /opt/python-3.13/bin/idle3 \
+      --slave /usr/bin/pydoc3 pydoc3 /opt/python-3.13/bin/pydoc3
+  ```
+
+### 3.2. devtoolset-11をインストールする
 
 1. ターゲットのRHEL7計算機で以下のコマンド
 
@@ -156,7 +232,7 @@ sudo yum install -y gmp-devel mpfr-devel libmpc-devel \
 
     > エラーになったら `devtoolset11_rpms` の中から必要な依存パッケージを追加する。依存パッケージを全てダウンロードしているはず。
 
-### 3.2. glib2.29 をビルド、インストールする
+### 3.3. glib2.29 をビルド、インストールする
 
 1. devtoolset-11 を有効にする
 
@@ -181,7 +257,7 @@ sudo yum install -y gmp-devel mpfr-devel libmpc-devel \
     sudo make install # make install
     ```
 
-### 3.3. gcc12.2をビルド、インストールする
+### 3.4. gcc12.2をビルド、インストールする
 
 1. devtoolset-11 を有効にする
 
@@ -213,6 +289,7 @@ sudo yum install -y gmp-devel mpfr-devel libmpc-devel \
     export CXX="g++ -Wl,--dynamic-linker=${GLIBC_LINKER} -Wl,--rpath=${GLIB_PATH}"
 
     ../configure \
+      --disable-bootstrap \
       --prefix=/opt/gcc-12.2 \
       --disable-multilib \
       --enable-languages=c,c++
@@ -221,7 +298,7 @@ sudo yum install -y gmp-devel mpfr-devel libmpc-devel \
     sudo make install
     ```
 
-### 3.4. patchelf0.18 をビルド、インストールする
+### 3.5. patchelf0.18 をビルド、インストールする
 
 1. devtoolset-11 を有効にする
 
