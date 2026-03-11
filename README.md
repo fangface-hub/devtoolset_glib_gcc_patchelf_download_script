@@ -56,10 +56,67 @@ Windows11で資材をダウンロードする場合は[こちら](https://github
 ターゲットのRHEL7計算機で以下のコマンドを実行する
 
 ```bash
+# sudo を入れてなかったら個別にインストールする
+su 
+yum install -y sudo
+exit
+# Development Tools
 sudo yum groupinstall -y "Development Tools"
 sudo yum install -y gmp-devel mpfr-devel libmpc-devel \
     bison flex wget tar xz
 ```
+
+- OS が EOL(End-Of-Life) でリポジトリが無効の場合、URLをvaultに変更する
+
+  - CentOS7.5の場合
+
+    - ターゲット計算機がオンラインに接続可能の場合
+
+      ```bash
+      su
+      sed -i 's|mirrorlist=|#mirrorlist=|g' /etc/yum.repos.d/CentOS-*.repo
+      sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*.repo
+  
+      yum clean all
+      yum makecache
+      exit
+      ```
+
+    - ターゲット計算機がオンラインに接続不可の場合
+      1. ISOファイルをダウンロードする
+
+          [CentOS-7-x86_64-Everything-1804.iso](http://vault.centos.org/7.5.1804/isos/x86_64/CentOS-7-x86_64-Everything-1804.iso)
+
+      1. ISOファイルをマウント＆ローカルリポジトリを構築する
+
+          ```bash
+          su
+          # マウントポイントを作成
+          mkdir -p /mnt/centos7
+          # マウントする
+          mount -o loop \
+              CentOS-7-x86_64-Everything-1804.iso \
+              /mnt/centos7
+          mkdir -p /opt/localrepo/centos7
+          cp -a /mnt/centos7/* /opt/localrepo/centos7/
+          umount /mnt/centos7
+          rm -rf /mnt/centos7
+          # ISOが用なしであれば削除
+          rm -f CentOS-7-x86_64-Everything-1804.iso
+          # 他のリポジトリを無効にする
+          sed -i 's/enabled=1/enabled=0/g' /etc/yum.repos.d/CentOS-*.repo
+          # リポジトリファイルの作成
+          {
+              echo '[local-centos7]'
+              echo 'name=Local CentOS 7.5 Everything Repo'
+              echo 'baseurl=file:///opt/localrepo/centos7'
+              echo 'enabled=1'
+              echo 'gpgcheck=0'
+          } > /etc/yum.repos.d/local-centos7.repo
+          yum clean all
+          yum makecache
+          exit
+          ```
 
 ### 2.2. オンライン端末で Python-3.13.12 と OpenSSL3.0 のtarballをダウンロードする
 

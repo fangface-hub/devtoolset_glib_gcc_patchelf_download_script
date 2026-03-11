@@ -1,6 +1,6 @@
 ﻿$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $logFile = Join-Path $scriptDir ("{0}.log" -f [System.IO.Path]::GetFileNameWithoutExtension($MyInvocation.MyCommand.Name))
-Start-Transcript -Path $logFile -Append | Out-Null
+Start-Transcript -Path $logFile | Out-Null
 
 try {
     # 共通関数を読み込む
@@ -57,13 +57,14 @@ function Get-LatestRpms {
     $rpmNames = ($html.Links | Where-Object { $_.href -match "\.rpm$" } | ForEach-Object { $_.href })
     $latestRpms = @()
     foreach ($prefix in $prefixes) {
-        $pattern = "$prefix" + "\-\d.*\.(noarch|x86_64)\.rpm"
+        $pattern = "^$prefix" + "\-\d.*\.(noarch|x86_64)\.rpm"
         $candidates = $rpmNames | Where-Object { $_ -match $pattern }
         if ($candidates.Count -eq 0) {
             Write-Host ("No candidates found for prefix: {0}" -f $prefix) -ForegroundColor Yellow
             continue
         }
         $latest = $candidates | Sort-Object { $_ -replace '[^0-9.]', '' } -Descending | Select-Object -First 1
+        Write-Host ("Latest RPM for prefix '{0}': {1}" -f $prefix, $latest) -ForegroundColor Green
         $latestRpms += @{ name = $latest; url = "$durl$latest" }
     }
     return $latestRpms
