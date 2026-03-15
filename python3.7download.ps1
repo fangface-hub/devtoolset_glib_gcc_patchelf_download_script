@@ -6,7 +6,7 @@ try {
     # 共通関数を読み込む
     . "$PSScriptRoot\common-download.ps1"
 
-    $saveDir = Join-Path $scriptDir 'python3.8_tarball'
+    $saveDir = Join-Path $scriptDir 'python3.7_tarball'
 
     # 既存ディレクトリは保持し、無ければ作成
     if (-not (Test-Path $saveDir)) {
@@ -15,8 +15,8 @@ try {
 
     # ダウンロード処理
     $urls = @(
-        "https://www.python.org/ftp/python/3.8.20/Python-3.8.20.tgz",
-        "https://github.com/openssl/openssl/releases/download/openssl-3.0.18/openssl-3.0.18.tar.gz"
+        "https://www.python.org/ftp/python/3.7.17/Python-3.7.17.tgz",
+        "https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1w/openssl-1.1.1w.tar.gz"
     )
     foreach ($url in $urls) {
         $filename = Split-Path $url -Leaf

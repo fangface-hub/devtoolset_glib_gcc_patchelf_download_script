@@ -26,8 +26,8 @@
   | glib2.29 | /opt/glibc-2.29 |
   | gcc12.2 | /opt/gcc-12.2 |
   | patchelf0.18 | /opt/patchelf0.18 |
-  | openssl-3.0.18 | /opt/openssl-3.0 |
-  | Python-3.8.20 | /opt/python-3.8 |
+  | openssl-1.1.1w | /opt/openssl-1.1.1 |
+  | Python-3.7.17 | /opt/python-3.7 |
 
 - ビルドのためのパッケージは以下のとおり
 
@@ -36,15 +36,36 @@
   | gmp-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
   | mpfr-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
   | libmpc-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | binutils | OSのISOファイルまたは書庫リポジトリからインストールする |
   | bison | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | bzip2-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
   | flex | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | g++ | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | gcc | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | gdbm-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | glibc-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | glibc-headers | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | gmp-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | kernel-headers | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | libffi | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | libffi-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | libmpc-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | make | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | mpfr-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | ncurses-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | perl-IPC-Cmd | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | perl-Time-Piece | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | readline-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | sqlite-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | tar | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | tk-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | uuid-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
   | wget | OSのISOファイルまたは書庫リポジトリからインストールする |
   | tar | OSのISOファイルまたは書庫リポジトリからインストールする |
   | xz | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | xz-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
   | zlib | OSのISOファイルまたは書庫リポジトリからインストールする |
   | zlib-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
-  | perl-IPC-Cmd | OSのISOファイルまたは書庫リポジトリからインストールする |
-  | perl-Time-Piece | OSのISOファイルまたは書庫リポジトリからインストールする |
   | devtoolset-11 | rpmファイルをダウンロードしインストールする |
   | scl-utils | rpmファイルをダウンロードしインストールする |
   | libgfortran5 | rpmファイルをダウンロードしインストールする |
@@ -65,13 +86,14 @@ su
 yum install -y sudo
 exit
 sudo yum install -y \
-    gcc g++ make binutils \
-    glibc-devel glibc-headers kernel-headers \
-    gmp-devel mpfr-devel libmpc-devel \
-    bison flex wget tar xz \
-    zlib zlib-devel \
-    perl-IPC-Cmd perl-Time-Piece \
-    libffi libffi-devel 
+    binutils bison bzip2-devel flex \
+    g++ gcc gdbm-devel glibc-devel \
+    glibc-headers gmp-devel kernel-headers \
+    libffi libffi-devel libmpc-devel \
+    make mpfr-devel ncurses-devel \
+    perl-IPC-Cmd perl-Time-Piece readline-devel \
+    sqlite-devel tar tk-devel uuid-devel \
+    wget xz xz-devel zlib zlib-devel
 ```
 
 - OS が EOL(End-Of-Life) でリポジトリが無効の場合、URLをvaultに変更する
@@ -129,26 +151,26 @@ sudo yum install -y \
           exit
           ```
 
-### 2.2. オンライン端末で Python-3.8.20 と OpenSSL3.0 のtarballをダウンロードする
+### 2.2. オンライン端末で Python-3.7.17 と OpenSSL 1.1.1 のtarballをダウンロードする
 
 - オンライン端末がRHEL7の場合
 
   1. curlでダウンロードする
 
       ```bash
-      mkdir python3.8_tarball
-      cd python3.8_tarball
-      curl -O https://www.python.org/ftp/python/3.8.20/Python-3.8.20.tgz
-      curl -O https://github.com/openssl/openssl/releases/download/openssl-3.0.18/openssl-3.0.18.tar.gz
+        mkdir python3.7_tarball
+        cd python3.7_tarball
+        curl -O https://www.python.org/ftp/python/3.7.17/Python-3.7.17.tgz
+      curl -O https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1w/openssl-1.1.1w.tar.gz
       ```
 
-  1. ターゲットのRHEL7計算機に `python3.8_tarball` ディレクトリを移動する
+      1. ターゲットのRHEL7計算機に `python3.7_tarball` ディレクトリを移動する
 
 - オンライン端末がWindowsの場合
 
-  1. ダウンロードスクリプト `python3.8download.ps1` を右クリックしPowershellで実行する
+  1. ダウンロードスクリプト `python3.7download.ps1` を右クリックしPowershellで実行する
 
-  1. ターゲットのRHEL7計算機に `python3.8_tarball` ディレクトリを移動する
+  1. ターゲットのRHEL7計算機に `python3.7_tarball` ディレクトリを移動する
 
 ### 2.3. オンライン端末で devtoolset-11 と関連パッケージをダウンロードする
 
@@ -242,52 +264,52 @@ sudo yum install -y \
 
 インストール手順を3章にまとめる
 
-### 3.1. Python-3.8.20 と OpenSSL3.0 をインストールする（ssl 解決）
+### 3.1. Python-3.7.17 と OpenSSL 1.1.1 をインストールする（ssl 解決）
 
 1. ターゲットのRHEL7計算機で以下のコマンド
 
   ```bash
-  cd python3.8_tarball
+  cd python3.7_tarball
   # ssl モジュールを有効化するため OpenSSL を先にビルドする
-  # 事前に openssl-3.0.18.tar.gz を python3.8_tarball に配置しておく
-  tar xf openssl-3.0.18.tar.gz
-  cd openssl-3.0.18
-  ./Configure linux-x86_64 --prefix=/opt/openssl-3.0 --openssldir=/opt/openssl-3.0 shared zlib
+  # 事前に openssl-1.1.1w.tar.gz を python3.7_tarball に配置しておく
+  tar xf openssl-1.1.1w.tar.gz
+  cd openssl-1.1.1w
+  ./Configure linux-x86_64 --prefix=/opt/openssl-1.1.1 --openssldir=/opt/openssl-1.1.1 shared zlib
   make -j"$(nproc)"
   sudo make install_sw
 
   # ランタイムリンカに OpenSSL のライブラリパスを登録
   {
-      echo "/opt/openssl-3.0/lib64"
-      echo "/opt/openssl-3.0/lib"
-  } | sudo tee /etc/ld.so.conf.d/openssl-3.0.conf
+      echo "/opt/openssl-1.1.1/lib64"
+      echo "/opt/openssl-1.1.1/lib"
+  } | sudo tee /etc/ld.so.conf.d/openssl-1.1.1.conf
   sudo ldconfig
 
   cd ..
-  # Python3.8 を /opt/openssl-3.0 にリンクしてビルドする
-  export CPPFLAGS="-I/opt/openssl-3.0/include"
-  export LDFLAGS="-Wl,-rpath,/opt/openssl-3.0/lib64 -Wl,-rpath,/opt/openssl-3.0/lib -L/opt/openssl-3.0/lib64 -L/opt/openssl-3.0/lib"
-  export PKG_CONFIG_PATH="/opt/openssl-3.0/lib64/pkgconfig:/opt/openssl-3.0/lib/pkgconfig"
+  # Python3.7 を /opt/openssl-1.1.1 にリンクしてビルドする
+  export CPPFLAGS="-I/opt/openssl-1.1.1/include"
+  export LDFLAGS="-Wl,-rpath,/opt/openssl-1.1.1/lib64 -Wl,-rpath,/opt/openssl-1.1.1/lib -L/opt/openssl-1.1.1/lib64 -L/opt/openssl-1.1.1/lib"
+  export PKG_CONFIG_PATH="/opt/openssl-1.1.1/lib64/pkgconfig:/opt/openssl-1.1.1/lib/pkgconfig"
 
-  tar xf Python-3.8.20.tgz
-  cd Python-3.8.20
+  tar xf Python-3.7.17.tgz
+  cd Python-3.7.17
   ./configure \
-      --prefix=/opt/python-3.8 \
+      --prefix=/opt/python-3.7 \
       --enable-optimizations \
-      --with-openssl=/opt/openssl-3.0 \
+      --with-openssl=/opt/openssl-1.1.1 \
       --with-openssl-rpath=auto
   make -j"$(nproc)"
   sudo make install
 
   # ssl の確認
-  /opt/python-3.8/bin/python3 -c "import ssl; print(ssl.OPENSSL_VERSION)"
+  /opt/python-3.7/bin/python3 -c "import ssl; print(ssl.OPENSSL_VERSION)"
 
   # alternatives 設定
   sudo update-alternatives \
-      --install /usr/bin/python3 python3 /opt/python-3.8/bin/python3 50 \
-      --slave /usr/bin/pip3 pip3 /opt/python-3.8/bin/pip3 \
-      --slave /usr/bin/idle3 idle3 /opt/python-3.8/bin/idle3 \
-      --slave /usr/bin/pydoc3 pydoc3 /opt/python-3.8/bin/pydoc3
+      --install /usr/bin/python3 python3 /opt/python-3.7/bin/python3 50 \
+      --slave /usr/bin/pip3 pip3 /opt/python-3.7/bin/pip3 \
+      --slave /usr/bin/idle3 idle3 /opt/python-3.7/bin/idle3 \
+      --slave /usr/bin/pydoc3 pydoc3 /opt/python-3.7/bin/pydoc3
   ```
 
 ### 3.2. devtoolset-11をインストールする
