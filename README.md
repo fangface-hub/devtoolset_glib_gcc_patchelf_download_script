@@ -33,11 +33,9 @@
 
   | コンポーネント | インストール方法 |
   | --- | --- |
-  | gmp-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
-  | mpfr-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
-  | libmpc-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
   | binutils | OSのISOファイルまたは書庫リポジトリからインストールする |
   | bison | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | boost | OSのISOファイルまたは書庫リポジトリからインストールする |
   | bzip2-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
   | flex | OSのISOファイルまたは書庫リポジトリからインストールする |
   | g++ | OSのISOファイルまたは書庫リポジトリからインストールする |
@@ -46,22 +44,32 @@
   | glibc-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
   | glibc-headers | OSのISOファイルまたは書庫リポジトリからインストールする |
   | gmp-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | iso-codes | OSのISOファイルまたは書庫リポジトリからインストールする |
   | kernel-headers | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | libavahi | OSのISOファイルまたは書庫リポジトリからインストールする |
   | libffi | OSのISOファイルまたは書庫リポジトリからインストールする |
   | libffi-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
   | libmpc-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | libquadmath | OSのISOファイルまたは書庫リポジトリからインストールする |
   | make | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | mokutil | OSのISOファイルまたは書庫リポジトリからインストールする |
   | mpfr-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
   | ncurses-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | openssh-clients | OSのISOファイルまたは書庫リポジトリからインストールする |
   | perl-IPC-Cmd | OSのISOファイルまたは書庫リポジトリからインストールする |
   | perl-Time-Piece | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | policycoreutils | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | policycoreutils-python | OSのISOファイルまたは書庫リポジトリからインストールする |
   | readline-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | redhat-rpm-config | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | source-highlight | OSのISOファイルまたは書庫リポジトリからインストールする |
   | sqlite-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
   | tar | OSのISOファイルまたは書庫リポジトリからインストールする |
   | tk-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
   | uuid-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
   | wget | OSのISOファイルまたは書庫リポジトリからインストールする |
   | tar | OSのISOファイルまたは書庫リポジトリからインストールする |
+  | unzip | OSのISOファイルまたは書庫リポジトリからインストールする |
   | xz | OSのISOファイルまたは書庫リポジトリからインストールする |
   | xz-devel | OSのISOファイルまたは書庫リポジトリからインストールする |
   | zlib | OSのISOファイルまたは書庫リポジトリからインストールする |
@@ -86,14 +94,24 @@ su
 yum install -y sudo
 exit
 sudo yum install -y \
-    binutils bison bzip2-devel flex \
-    g++ gcc gdbm-devel glibc-devel \
-    glibc-headers gmp-devel kernel-headers \
-    libffi libffi-devel libmpc-devel \
-    make mpfr-devel ncurses-devel \
-    perl-IPC-Cmd perl-Time-Piece readline-devel \
-    sqlite-devel tar tk-devel uuid-devel \
-    wget xz xz-devel zlib zlib-devel
+    avahi binutils bison \
+    boost bzip2-devel elfutils-devel \
+    flex g++ gcc gdbm-devel \
+    glibc-devel glibc-headers \
+    gmp-devel iso-codes json-c \
+    kernel-devel-uname-r \
+    kernel-headers libavahi \
+    libffi libffi-devel \
+    libmpc-devel libquadmath \
+    make mokutil mpfr-devel \
+    ncurses-devel openssh-clients \
+    perl-IPC-Cmd perl-Time-Piece \
+    policycoreutils policycoreutils-python \
+    readline-devel redhat-rpm-config \
+    source-highlight sqlite-devel \
+    tar tk-devel unzip \
+    uuid-devel wget which \
+    xz xz-devel zlib zlib-devel
 ```
 
 - OS が EOL(End-Of-Life) でリポジトリが無効の場合、URLをvaultに変更する
@@ -301,7 +319,6 @@ sudo yum install -y \
   # は非常に時間がかかるので注意(30～60分以上かかる)
   ./configure \
       --prefix=/opt/python-3.7 \
-      --enable-optimizations \
       --with-openssl=/opt/openssl-1.1.1 \
       --with-openssl-rpath=auto
   make -j"$(nproc)"
@@ -317,6 +334,19 @@ sudo yum install -y \
       --slave /usr/bin/idle3 idle3 /opt/python-3.7/bin/idle3 \
       --slave /usr/bin/pydoc3 pydoc3 /opt/python-3.7/bin/pydoc3
   ```
+
+- ビルドが途中で失敗したら
+
+  ソースのディレクトリで以下のコマンドを実行し、ビルドを初期化する
+
+  ```bash
+  make distclean
+  make clean
+  rm -f python Programs/_testembed
+  rm -f pybuilddir.txt
+  rm -rf build
+  ```
+
 
 ### 3.2. devtoolset-11をインストールする
 
