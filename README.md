@@ -296,6 +296,9 @@ sudo yum install -y \
 
   tar xf Python-3.7.17.tgz
   cd Python-3.7.17
+  # .configure の注意
+  # 最適化 --enable-optimizations オプション(PGO) 
+  # は非常に時間がかかるので注意(30～60分以上かかる)
   ./configure \
       --prefix=/opt/python-3.7 \
       --enable-optimizations \
