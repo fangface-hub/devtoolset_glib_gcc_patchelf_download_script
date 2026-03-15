@@ -412,14 +412,9 @@ sudo yum install -y \
     mkdir build
     cd build
 
-    GLIB_PATH=/opt/glibc-2.29/lib
-    GLIBC_LINKER=/opt/glibc-2.29/lib/ld-linux-x86-64.so.2
-    export CC="gcc -Wl,--dynamic-linker=${GLIBC_LINKER} -Wl,--rpath=${GLIB_PATH}"
-    export CXX="g++ -Wl,--dynamic-linker=${GLIBC_LINKER} -Wl,--rpath=${GLIB_PATH}"
-
     ../configure \
-      --disable-bootstrap \
       --prefix=/opt/gcc-12.2 \
+      --disable-bootstrap \
       --disable-multilib \
       --enable-languages=c,c++
 
