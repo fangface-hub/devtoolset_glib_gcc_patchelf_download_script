@@ -176,9 +176,9 @@ sudo yum install -y \
   1. curlでダウンロードする
 
       ```bash
-        mkdir python3.7_tarball
-        cd python3.7_tarball
-        curl -O https://www.python.org/ftp/python/3.7.17/Python-3.7.17.tgz
+      mkdir python3.7_tarball
+      cd python3.7_tarball
+      curl -O https://www.python.org/ftp/python/3.7.17/Python-3.7.17.tgz
       curl -O https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1w/openssl-1.1.1w.tar.gz
       ```
 
