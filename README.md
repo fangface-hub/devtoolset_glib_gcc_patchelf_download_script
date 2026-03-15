@@ -290,6 +290,9 @@ sudo yum install -y \
   export CPPFLAGS="-I/opt/openssl-1.1.1/include"
   export LDFLAGS="-Wl,-rpath,/opt/openssl-1.1.1/lib64 -Wl,-rpath,/opt/openssl-1.1.1/lib -L/opt/openssl-1.1.1/lib64 -L/opt/openssl-1.1.1/lib"
   export PKG_CONFIG_PATH="/opt/openssl-1.1.1/lib64/pkgconfig:/opt/openssl-1.1.1/lib/pkgconfig"
+  # Python test_socket がハングアップするのでこのセッションだけIPv6を無効にしておく
+  export GAI_CONF=/dev/null
+  export GAI_IGNORE_IPV6=1
 
   tar xf Python-3.7.17.tgz
   cd Python-3.7.17
