@@ -347,7 +347,6 @@ sudo yum install -y \
   rm -rf build
   ```
 
-
 ### 3.2. devtoolset-11をインストールする
 
 1. ターゲットのRHEL7計算機で以下のコマンド
