@@ -374,17 +374,34 @@ sudo yum install -y \
     ```bash
     cd glib2.29_tarball # 格納したディレクトリへ移動
     tar xf glibc-2.29.tar.gz # 圧縮ファイルを展開
-    cd glibc-2.29 # 展開先へ移動
+    # in-tree build は RPATH を埋め込んでしまうので
+    # 別ディレクトリを作成し移動する
     mkdir build # ビルドディレクトリ作成
     cd build # ビルドへ移動
     
     # configure
-    ../configure \
+    ../glibc-2.29/configure \
         --prefix=/opt/glibc-2.29 \
         --disable-werror
     make -j$(nproc) # make
     sudo make install # make install
     ```
+
+    - glibビルドの確認
+
+      - 以下のコマンドの結果が何もないこと
+
+        ```bash
+        readelf -d /opt/glibc-2.29/lib/ld-linux-x86-64.so.2 | grep RPATH
+        ```
+
+      - 以下のコマンドの結果が `ok` であること
+
+        ```bash
+        /opt/glibc-2.29/lib/ld-linux-x86-64.so.2 \
+          --library-path /opt/glibc-2.29/lib \
+          /bin/echo ok
+        ```
 
 ### 3.4. gcc12.2をビルド、インストールする
 
