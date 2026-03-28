@@ -461,7 +461,7 @@ sudo yum install -y \
 
 システムの環境変数を変更すると古いVSCodeを使っているユーザにも影響してしまうので、なるべく個人のプロファイルを設定する。
 
-`~.bashrc` と `~/.vscode-server/server-env-setup` に以下の環境変数を追加する
+`~/.bashrc` と `~/.vscode-server/server-env-setup` に以下の環境変数を追加する
 
 ```bash
 # 省略(既存の行は変更しない)
@@ -473,3 +473,9 @@ export VSCODE_SERVER_CUSTOM_GLIBC_LINKER=${GLIBC2_29_LIB}/ld-linux-x86-64.so.2
 export VSCODE_SERVER_CUSTOM_GLIBC_PATH=${VSCODE_LD_LIBRARY_PATH}
 export VSCODE_SERVER_PATCHELF_PATH=${PATCHELF0_18}/bin/patchelf
 ```
+
+## Support the Project
+
+この記事が役に立つと感じたら、プロジェクトへの支援を検討してみてください。
+
+[![GitHub Sponsors](https://img.shields.io/badge/Sponsor-GitHub-ff69b4?style=for-the-badge)](https://github.com/sponsors/fangface-hub)
